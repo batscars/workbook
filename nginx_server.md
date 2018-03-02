@@ -1,9 +1,14 @@
 #### 内网环境部署nginx服务器
 ##### step 1: 下载相关组件源码
 ```
-# pcre [https://sourceforge.net/projects/pcre/files/pcre/8.41/pcre-8.41.tar.gz/download](https://sourceforge.net/projects/pcre/files/pcre/8.41/pcre-8.41.tar.gz/download)
-# zlib [http://www.zlib.net/zlib-1.2.11.tar.gz](http://www.zlib.net/zlib-1.2.11.tar.gz)
-# nginx [https://nginx.org/download/nginx-1.12.2.tar.gz](https://nginx.org/download/nginx-1.12.2.tar.gz)
+# pcre 
+https://sourceforge.net/projects/pcre/files/pcre/8.41/pcre-8.41.tar.gz/download
+
+# zlib 
+http://www.zlib.net/zlib-1.2.11.tar.gz
+
+# nginx 
+https://nginx.org/download/nginx-1.12.2.tar.gz
 
 ```
 ##### step 2: 源码安装
