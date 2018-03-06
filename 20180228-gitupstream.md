@@ -22,6 +22,7 @@ git push origin master
 ###### step 4 同步远端分支的更新
 ```
 git pull upstream master
+#如果存在冲突，解决冲突后先执行git commit
 git push origin master
 ```
 ##### github跟踪远程github repo的更新
