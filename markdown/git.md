@@ -27,3 +27,12 @@ git push origin master
 ```
 ##### github跟踪远程github repo的更新
 fork后创建upstream跟踪远端更新即可
+
+##### git回退版本
+```
+# 先查看版本信息
+git reflog
+# 回退到指定的版本
+git reset --hard 版本号
+```
+

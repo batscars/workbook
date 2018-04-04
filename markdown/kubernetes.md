@@ -18,12 +18,16 @@ helm install chart-dir
 ```
 # 通过yaml文件创建deployment，pod或service等
 kubectl create -f yaml/busybox.yaml
+# 删除通过yaml文件创建的k8s objs
+kubectl delete -f yaml/busybox.yaml
 
 # 给container发送执行命令
 kubectl -n default exec -ti busybox -- nslookup kubernetes # 查看dns状态
 
 # scale up deployments
 kubectl -n kube-system scale deployment deploy-name --replicas=num
+# 动态更新deployment
+kubectl -n kube-system edit deployment deploy-name
 
 # 将某个pod映射到本地的某个端口从而可以使用localhost:port的方式访问
 kubectl -n namespace port-forward pod-name port
