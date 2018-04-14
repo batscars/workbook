@@ -42,4 +42,6 @@ kubectl describe node node-name
 
 # 给node打标签
 kubectl label nodes node-name a=b
+# 删除一个标签a
+kubectl label nodes node-name a-
 ```
