@@ -16,7 +16,7 @@ docker rm container_id/name
 ```
 ##### docker debug
 ```
-docker run -it/-d -v -e -p --name --restart repo:tag
+docker run -it/-d -v -e -p --name --restart --cpuset-cpus repo:tag
 docker logs -f container_id/name
 ```
 
