@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: worker1
+spec:
+  template:
+    metadata: 
+      name: worker1
+      labels:
+        app: worker1
+    spec:
+      containers:
+      - name: worker1
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:
+          - sleep
+          - "20"
+        resources:
+          requests:
+            memory: 5Gi
+      restartPolicy: OnFailure
