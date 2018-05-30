@@ -1,0 +1,119 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scheduler
+spec:
+  template:
+    metadata:
+      name: scheduler
+      labels:
+        app: scheduler
+    spec:
+      containers:
+      - name: scheduler
+        image: mxnet:1.2.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /mnt/glusterfs
+          name: glustervol
+        command: ["python", "/mnt/glusterfs/incubator-mxnet/example/image-classification/train_mnist.py", "--kv-store=dist_async"]
+        env:
+        - name: DMLC_PS_ROOT_URI
+          value: "mx-scheduler"
+        - name: DMLC_PS_ROOT_PORT
+          value: "9091"
+        - name: DMLC_NUM_WORKER
+          value: "1"
+        - name: DMLC_NUM_SERVER
+          value: "1"
+        - name: PS_VERBOSE
+          value: "1"
+        - name: DMLC_USE_KUBERNETES
+          value: "1"
+        - name: DMLC_ROLE
+          value: "scheduler"
+      volumes:
+        - name: glustervol
+          hostPath:
+            path: /code/k8s/demo
+      restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mx-scheduler
+spec:
+  selector:
+    app: scheduler
+  ports:
+  - protocol: TCP
+    port: 9091
+    targetPort: 9091
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mx-worker
+spec:
+  template:
+    metadata:
+      name: mx-worker
+      labels:
+        app: mx-worker
+    spec:
+      containers:
+      - name: mx-server-0
+        image: mxnet:1.2.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /mnt/glusterfs
+          name: glustervol
+        command: ["python", "/mnt/glusterfs/incubator-mxnet/example/image-classification/train_mnist.py", "--kv-store=dist_async"]
+        env:
+        - name: DMLC_PS_ROOT_URI
+          value: "mx-scheduler"
+        - name: DMLC_PS_ROOT_PORT
+          value: "9091"
+        - name: DMLC_NUM_WORKER
+          value: "1"
+        - name: DMLC_NUM_SERVER
+          value: "1"
+        - name: PS_VERBOSE
+          value: "1"
+        - name: DMLC_USE_KUBERNETES
+          value: "1"
+        - name: DMLC_ROLE
+          value: "server"
+        - name: DMLC_SERVER_ID
+          value: "0"
+      - name: mx-worker-0
+        image: mxnet:1.2.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /mnt/glusterfs
+          name: glustervol
+        command: ["python", "/mnt/glusterfs/incubator-mxnet/example/image-classification/train_mnist.py", "--kv-store=dist_async"]
+        env:
+        - name: DMLC_PS_ROOT_URI
+          value: "mx-scheduler"
+        - name: DMLC_PS_ROOT_PORT
+          value: "9091"
+        - name: DMLC_NUM_WORKER
+          value: "1"
+        - name: DMLC_NUM_SERVER
+          value: "1"
+        - name: PS_VERBOSE
+          value: "1"
+        - name: DMLC_USE_KUBERNETES
+          value: "1"
+        - name: DMLC_ROLE
+          value: "worker"
+        - name: DMLC_SERVER_ID
+          value: "0"
+        - name: DMLC_WORKER_ID
+          value: "0"
+      volumes:
+        - name: glustervol
+          hostPath:
+            path: /code/k8s/demo
+      restartPolicy: OnFailure
